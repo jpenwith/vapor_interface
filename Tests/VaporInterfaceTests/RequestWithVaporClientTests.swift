@@ -14,7 +14,8 @@ import XCTest
 final class RequestWithVaporClientTests: XCTestCase {
     var application: Application!
     var applicationRunTask: Task<(), Error>!
-    var vaporClient: VaporClient!
+//    var vaporClient: VaporClient!
+    var vaporClient: VaporInterface.Client<VaporClientNetworkAdapter>!
 
     override func setUp() async throws {
         let application = Application(.testing)
@@ -24,7 +25,10 @@ final class RequestWithVaporClientTests: XCTestCase {
             try application.run()
         }
 
-        let vaporClient = VaporClient(baseURL: .init(string: "http://localhost:8080/")!, vaporClient: application.client)
+        let vaporClient = VaporInterface.Client(
+            url: .init(string: "http://localhost:8080/")!,
+            networkAdapter: VaporClientNetworkAdapter(client: application.client)
+        )
 
         self.application = application
         self.applicationRunTask = applicationRunTask
@@ -121,7 +125,7 @@ extension RequestWithVaporClientTests {
         do {
             readResponse = try await vaporClient.execute(readRequest)
         }
-        catch let error as VaporClient.Error.Response {
+        catch let error as VaporInterface.ClientError.Response {
             XCTAssertEqual(error.status, .notFound)
         }
 

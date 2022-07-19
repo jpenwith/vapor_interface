@@ -15,7 +15,7 @@ struct CreateUserRequest {
 }
 
 extension CreateUserRequest: VaporInterface.Request {
-    struct Route: RequestRoute {
+    struct Route: VaporInterface.Route {
         static let path = "users"
 
         static let method: HTTPMethod = .POST
@@ -23,7 +23,7 @@ extension CreateUserRequest: VaporInterface.Request {
 
     typealias Body = User.Create
 
-    struct Response: RequestResponse {
+    struct Response: VaporInterface.Response {
         let user: User.Read
 
         let status: HTTPStatus = .created

@@ -17,12 +17,14 @@ let package = Package(
     dependencies: [
         // 💧 A server-side Swift web framework.
         .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
+        .package(url: "https://github.com/adam-fowler/dictionary-encoder.git", exact: "1.0.0"),
     ],
     targets: [
         .target(
             name: "VaporInterface",
             dependencies: [
                 .product(name: "Vapor", package: "vapor"),
+                .product(name: "DictionaryEncoder", package: "dictionary-encoder"),
             ]),
         .target(
             name: "Example",

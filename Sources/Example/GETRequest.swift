@@ -14,11 +14,11 @@ struct GETRequest {}
 
 
 extension GETRequest: VaporInterface.Request {
-    struct Route: RequestRoute {
+    struct Route: VaporInterface.Route {
         static let path = "get"
     }
 
-    struct Response: RequestResponse {
+    struct Response: VaporInterface.Response {
         struct Body: Content {
             var message = "success"
         }

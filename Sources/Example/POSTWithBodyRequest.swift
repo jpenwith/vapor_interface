@@ -22,7 +22,7 @@ struct POSTWithBodyRequest {
 
 
 extension POSTWithBodyRequest: VaporInterface.Request {
-    struct Route: RequestRoute {
+    struct Route: VaporInterface.Route {
         static let method: HTTPMethod = .POST
 
         static let path = "post/with/body"
@@ -33,7 +33,7 @@ extension POSTWithBodyRequest: VaporInterface.Request {
         let optionalValue: String?
     }
 
-    struct Response: RequestResponse {
+    struct Response: VaporInterface.Response {
         let value: String
         let optionalValue: String?
 

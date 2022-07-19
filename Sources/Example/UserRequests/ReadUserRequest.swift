@@ -15,7 +15,7 @@ struct ReadUserRequest {
 }
 
 extension ReadUserRequest: VaporInterface.Request {
-    struct Route: RequestRoute {
+    struct Route: VaporInterface.Route {
         static let path = "users/:id"
 
         struct Parameters: Content {
@@ -23,7 +23,7 @@ extension ReadUserRequest: VaporInterface.Request {
         }
     }
 
-    struct Response: RequestResponse {
+    struct Response: VaporInterface.Response {
         let user: User.Read
     }
 }

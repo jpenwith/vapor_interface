@@ -15,7 +15,7 @@ struct DeleteUserRequest {
 }
 
 extension DeleteUserRequest: VaporInterface.Request {
-    struct Route: RequestRoute {
+    struct Route: VaporInterface.Route {
         static let path = "users/:id"
 
         static let method: HTTPMethod = .DELETE
@@ -25,7 +25,7 @@ extension DeleteUserRequest: VaporInterface.Request {
         }
     }
 
-    struct Response: RequestResponse {
+    struct Response: VaporInterface.Response {
         let user: User.Read
 
         struct Body: Content {

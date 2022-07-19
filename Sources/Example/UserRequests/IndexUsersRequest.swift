@@ -13,11 +13,11 @@ import VaporInterface
 struct IndexUsersRequest {}
 
 extension IndexUsersRequest: VaporInterface.Request {
-    struct Route: RequestRoute {
+    struct Route: VaporInterface.Route {
         static let path = "users"
     }
 
-    struct Response: RequestResponse {
+    struct Response: VaporInterface.Response {
         let users: [User.Read]
     }
 }

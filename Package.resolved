@@ -28,6 +28,15 @@
       }
     },
     {
+      "identity" : "dictionary-encoder",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/adam-fowler/dictionary-encoder.git",
+      "state" : {
+        "revision" : "86d5139662b987d43fd968e84d082084997e8230",
+        "version" : "1.0.0"
+      }
+    },
+    {
       "identity" : "multipart-kit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/multipart-kit.git",

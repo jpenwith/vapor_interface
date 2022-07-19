@@ -11,10 +11,10 @@ import Vapor
 
 // MARK: - Request
 public protocol Request {
-    associatedtype Route: RequestRoute = EmptyRequestRoute
-    associatedtype Query: Content = EmptyRequestQuery
-    associatedtype Body: Content = EmptyRequestBody
-    associatedtype Response: RequestResponse = EmptyRequestResponse
+    associatedtype Route: VaporInterface.Route = EmptyRequestRoute
+    associatedtype Query: Vapor.Content = EmptyRequestQuery
+    associatedtype Body: Vapor.Content = EmptyRequestBody
+    associatedtype Response: VaporInterface.Response = EmptyRequestResponse
 
     var parameters: Route.Parameters { get }
 

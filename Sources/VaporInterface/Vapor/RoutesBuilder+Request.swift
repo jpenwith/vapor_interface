@@ -16,7 +16,7 @@ extension RoutesBuilder {
         _ requestType: Req.Type,
         body: HTTPBodyStreamStrategy = .collect,
         use handler: @escaping (Req, Vapor.Request) async throws -> Req.Response
-    ) -> Route {
+    ) -> Vapor.Route {
         let vaporHandler: (Vapor.Request) async throws -> Vapor.Response = { vaporServerRequest in
             let request = try Req(vaporServerRequest: vaporServerRequest)
 
@@ -33,7 +33,7 @@ extension RoutesBuilder {
         _ requestType: Req.Type,
         body: HTTPBodyStreamStrategy = .collect,
         use handler: @escaping (Req, Vapor.Request) async throws -> Req.Response
-    ) -> Route where Req.Body == EmptyRequestBody {
+    ) -> Vapor.Route where Req.Body == EmptyRequestBody {
         let vaporHandler: (Vapor.Request) async throws -> Vapor.Response = { vaporServerRequest in
             let request = try Req(vaporServerRequest: vaporServerRequest)
 
@@ -107,7 +107,7 @@ extension Request {
 
 
 // MARK: - Encoding outbound response for server
-extension RequestResponse {
+extension Response {
     internal func makeVaporServerResponse() throws -> Vapor.Response {
         let vaporResponse = Vapor.Response(status: status, version: version, headers: headers)
 

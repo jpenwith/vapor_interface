@@ -9,7 +9,7 @@ import Foundation
 import Vapor
 
 
-public protocol RequestRoute: Content {
+public protocol Route: Content {
     associatedtype Parameters: Content = EmptyRequestRouteParameters
 
     static var method: HTTPMethod { get }
@@ -19,13 +19,13 @@ public protocol RequestRoute: Content {
 
 
 // MARK: - Defaults
-public extension RequestRoute {
+public extension Route {
     static var method: HTTPMethod { .GET }
 }
 
 
 // MARK: - Defaults
-public struct EmptyRequestRoute: RequestRoute {
+public struct EmptyRequestRoute: Route {
     static public let path = ""
 
     public static var empty: Self { Self() }

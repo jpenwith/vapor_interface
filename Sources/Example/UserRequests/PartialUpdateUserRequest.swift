@@ -15,7 +15,7 @@ struct PartialUpdateUserRequest {
 }
 
 extension PartialUpdateUserRequest: VaporInterface.Request {
-    struct Route: RequestRoute {
+    struct Route: VaporInterface.Route {
         static let path = "users/:id"
 
         static let method: HTTPMethod = .PATCH
@@ -27,7 +27,7 @@ extension PartialUpdateUserRequest: VaporInterface.Request {
 
     typealias Body = User.PartialUpdate
 
-    struct Response: RequestResponse {
+    struct Response: VaporInterface.Response {
         let user: User.Read
 
         struct Body: Content {

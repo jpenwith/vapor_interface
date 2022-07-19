@@ -16,7 +16,7 @@ struct GETWithParameterRequest {
 
 
 extension GETWithParameterRequest: VaporInterface.Request {
-    struct Route: RequestRoute {
+    struct Route: VaporInterface.Route {
         static let path = "get/with/parameter/:value"
 
         struct Parameters: Content {
@@ -24,7 +24,7 @@ extension GETWithParameterRequest: VaporInterface.Request {
         }
     }
 
-    struct Response: RequestResponse {
+    struct Response: VaporInterface.Response {
         let value: String
 
         struct Body: Content {

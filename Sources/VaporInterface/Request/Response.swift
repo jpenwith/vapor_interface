@@ -9,7 +9,7 @@ import Foundation
 import Vapor
 
 
-public protocol RequestResponse{
+public protocol Response{
     associatedtype Body: Content = EmptyRequestResponseBody
     
     var status: HTTPStatus { get }
@@ -25,7 +25,7 @@ public protocol RequestResponse{
 
 
 // MARK: - Defaults
-public extension RequestResponse {
+public extension VaporInterface.Response {
     var status: HTTPStatus { .ok }
 
     var version: HTTPVersion { .init(major: 1, minor: 1) }
@@ -35,12 +35,12 @@ public extension RequestResponse {
     var body: EmptyRequestResponseBody { .empty }
 }
 
-public struct EmptyRequestResponse: RequestResponse {
+public struct EmptyRequestResponse: VaporInterface.Response {
     public init(status: HTTPStatus, version: HTTPVersion, headers: HTTPHeaders, body: EmptyRequestResponseBody) throws {}
 
     public init() {}
 }
 
-public struct EmptyRequestResponseBody: Content {
+public struct EmptyRequestResponseBody: Vapor.Content {
     public static let empty = Self()
 }

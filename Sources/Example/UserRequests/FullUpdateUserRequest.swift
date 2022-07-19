@@ -15,7 +15,7 @@ struct FullUpdateUserRequest {
 }
 
 extension FullUpdateUserRequest: VaporInterface.Request {
-    struct Route: RequestRoute {
+    struct Route: VaporInterface.Route {
         static let path = "users/:id"
 
         static let method: HTTPMethod = .PUT
@@ -27,7 +27,7 @@ extension FullUpdateUserRequest: VaporInterface.Request {
 
     typealias Body = User.FullUpdate
 
-    struct Response: RequestResponse {
+    struct Response: VaporInterface.Response {
         let user: User.Read
 
         struct Body: Content {

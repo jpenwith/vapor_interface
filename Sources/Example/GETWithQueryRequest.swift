@@ -22,7 +22,7 @@ struct GETWithQueryRequest {
 
 
 extension GETWithQueryRequest: VaporInterface.Request {
-    struct Route: RequestRoute {
+    struct Route: VaporInterface.Route {
         static let path = "get/with/Query"
     }
 
@@ -31,7 +31,7 @@ extension GETWithQueryRequest: VaporInterface.Request {
         let optionalValue: String?
     }
 
-    struct Response: RequestResponse {
+    struct Response: VaporInterface.Response {
         let value: String
         let optionalValue: String?
 
