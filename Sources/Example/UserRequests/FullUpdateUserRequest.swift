@@ -63,3 +63,10 @@ extension FullUpdateUserRequest.Response {
 
     var body: Body { .init(updated: user) }
 }
+
+
+extension FullUpdateUserRequest: AuthenticatableRequest {
+    var authenticationMethod: AuthenticationMethod {
+        .bearer
+    }
+}

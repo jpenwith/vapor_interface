@@ -53,3 +53,10 @@ extension DeleteUserRequest.Response {
 
     var body: Body { .init(deleted: user) }
 }
+
+
+extension DeleteUserRequest: AuthenticatableRequest {
+    var authenticationMethod: AuthenticationMethod {
+        .basic
+    }
+}

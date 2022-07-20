@@ -22,7 +22,7 @@ public struct VaporClientNetworkAdapter: ClientNetworkAdapter {
 }
 
 extension VaporClientNetworkAdapter {
-    public func createRequest(fromInformation requestInformation: Client<VaporClientNetworkAdapter>.RequestInformation) throws -> ClientRequest {
+    public func createRequest(fromInformation requestInformation: ClientRequestInformation) throws -> ClientRequest {
         .init(
             method: requestInformation.method,
             url: requestInformation.url,
@@ -39,7 +39,7 @@ extension VaporClientNetworkAdapter {
 }
 
 extension VaporClientNetworkAdapter {
-    public func getInformation(from response: ClientResponse) -> Client<VaporClientNetworkAdapter>.ResponseInformation {
+    public func getInformation(from response: ClientResponse) -> ClientResponseInformation {
         .init(
             status: response.status,
             version: .init(major: 1, minor: 1),

@@ -146,6 +146,15 @@ extension VaporClientNetworkAdapterTests {
             emailAddress: "jane@example.com",
             lastActiveAt: nil
         ))
+
+        do {
+            let _ = try await client.execute(partialUpdateRequest)
+        }
+        catch let error as VaporInterface.ClientResponseError {
+            XCTAssertEqual(error.status, .unauthorized)
+        }
+        client.authenticationCredentials.append(BearerAuthenticationCredentials(token: "sohJah9aiphieWaeSh1ceek2sue3aejoghu0augugh3Ahahthaecoo2vee9teing"))
+
         let partialUpdateResponse = try await client.execute(partialUpdateRequest)
         XCTAssertEqual(partialUpdateResponse.status, .ok)
         XCTAssertEqual(partialUpdateResponse.user.id, createResponse.user.id)
@@ -166,6 +175,15 @@ extension VaporClientNetworkAdapterTests {
         XCTAssertEqual(fullUpdateResponse.user.lastActiveAt.timeIntervalSinceReferenceDate, Date().timeIntervalSinceReferenceDate, accuracy: 1)
 
         let deleteRequest = DeleteUserRequest(id: createResponse.user.id)
+
+        do {
+            let _ = try await client.execute(deleteRequest)
+        }
+        catch let error as VaporInterface.ClientResponseError {
+            XCTAssertEqual(error.status, .unauthorized)
+        }
+        client.authenticationCredentials.append(BasicAuthenticationCredentials(username: "authenticated@example.com", password: "pass"))
+
         let deleteResponse = try await client.execute(deleteRequest)
         XCTAssertEqual(deleteResponse.status, .ok)
         XCTAssertEqual(deleteResponse.user.id, createResponse.user.id)

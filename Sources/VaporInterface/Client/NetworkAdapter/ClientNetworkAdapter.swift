@@ -13,9 +13,9 @@ public protocol ClientNetworkAdapter {
     associatedtype Request
     associatedtype Response
 
-    func createRequest(fromInformation requestInformation: Client<Self>.RequestInformation) throws -> Self.Request
+    func createRequest(fromInformation requestInformation: ClientRequestInformation) throws -> Self.Request
 
     func executeRequest(_ request: Self.Request) async throws -> Self.Response
 
-    func getInformation(from response: Self.Response) -> Client<Self>.ResponseInformation
+    func getInformation(from response: Self.Response) -> ClientResponseInformation
 }

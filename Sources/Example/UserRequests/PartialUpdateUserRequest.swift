@@ -63,3 +63,10 @@ extension PartialUpdateUserRequest.Response {
 
     var body: Body { .init(updated: user) }
 }
+
+
+extension PartialUpdateUserRequest: AuthenticatableRequest {
+    var authenticationMethod: AuthenticationMethod {
+        .bearer
+    }
+}

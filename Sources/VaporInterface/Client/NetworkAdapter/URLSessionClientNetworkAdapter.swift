@@ -23,7 +23,7 @@ public struct URLSessionClientNetworkAdapter: ClientNetworkAdapter {
 }
 
 extension URLSessionClientNetworkAdapter {
-    public func createRequest(fromInformation requestInformation: Client<Self>.RequestInformation) throws -> URLRequest {
+    public func createRequest(fromInformation requestInformation: ClientRequestInformation) throws -> URLRequest {
         var urlRequest = URLRequest(url: .init(string: requestInformation.url.string)!)
 
         urlRequest.httpMethod = requestInformation.method.string
@@ -47,7 +47,7 @@ extension URLSessionClientNetworkAdapter {
 }
 
 extension URLSessionClientNetworkAdapter {
-    public func getInformation(from response: (Data, HTTPURLResponse)) -> Client<Self>.ResponseInformation {
+    public func getInformation(from response: (Data, HTTPURLResponse)) -> ClientResponseInformation {
         .init(
             status: .init(statusCode: response.1.statusCode),
             version: .init(major: 1, minor: 1),

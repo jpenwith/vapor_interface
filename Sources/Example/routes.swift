@@ -1,10 +1,10 @@
 import Vapor
 import VaporInterface
 
-var users = [UUID: User.Read]()
-
 
 func routes(_ app: Application) throws {
+    var users = [UUID: User.Read]()
+
     app.on(EmptyRequest.self) { _, vaporRequest in
         return .init()
     }
@@ -50,39 +50,84 @@ func routes(_ app: Application) throws {
         return .init(user: user)
     }
 
-    app.on(PartialUpdateUserRequest.self) { partialUpdateUserRequest, vaporRequest in
-        guard var user = users[partialUpdateUserRequest.user.id] else {
-            throw Abort(.notFound)
-        }
+    app
+        .grouped(UserBearerAuthenticator())
+        .grouped(User.Auth.guardMiddleware())
+        .on(PartialUpdateUserRequest.self) { partialUpdateUserRequest, vaporRequest in
+            guard var user = users[partialUpdateUserRequest.user.id] else {
+                throw Abort(.notFound)
+            }
 
-        user.name = partialUpdateUserRequest.user.name ?? user.name
-        user.emailAddress = partialUpdateUserRequest.user.emailAddress ?? user.emailAddress
-        user.lastActiveAt = partialUpdateUserRequest.user.lastActiveAt ?? user.lastActiveAt
+            user.name = partialUpdateUserRequest.user.name ?? user.name
+            user.emailAddress = partialUpdateUserRequest.user.emailAddress ?? user.emailAddress
+            user.lastActiveAt = partialUpdateUserRequest.user.lastActiveAt ?? user.lastActiveAt
 
-        users[partialUpdateUserRequest.user.id] = user
+            users[partialUpdateUserRequest.user.id] = user
 
-        return .init(user: user)
+            return .init(user: user)
     }
 
-    app.on(FullUpdateUserRequest.self) { fullUpdateUserRequest, vaporRequest in
-        guard var user = users[fullUpdateUserRequest.user.id] else {
-            throw Abort(.notFound)
-        }
+    app
+        .grouped(UserBearerAuthenticator())
+        .grouped(User.Auth.guardMiddleware())
+        .on(FullUpdateUserRequest.self) { fullUpdateUserRequest, vaporRequest in
+            guard var user = users[fullUpdateUserRequest.user.id] else {
+                throw Abort(.notFound)
+            }
 
-        user.name = fullUpdateUserRequest.user.name
-        user.emailAddress = fullUpdateUserRequest.user.emailAddress
-        user.lastActiveAt = fullUpdateUserRequest.user.lastActiveAt
+            user.name = fullUpdateUserRequest.user.name
+            user.emailAddress = fullUpdateUserRequest.user.emailAddress
+            user.lastActiveAt = fullUpdateUserRequest.user.lastActiveAt
 
-        users[fullUpdateUserRequest.user.id] = user
+            users[fullUpdateUserRequest.user.id] = user
 
-        return .init(user: user)
+            return .init(user: user)
     }
 
-    app.on(DeleteUserRequest.self) { deleteUserRequest, vaporRequest in
-        guard let user = users.removeValue(forKey: deleteUserRequest.id) else {
-            throw Abort(.notFound)
-        }
+    app
+        .grouped(UserBasicAuthenticator())
+        .grouped(User.Auth.guardMiddleware())
+        .on(DeleteUserRequest.self) { deleteUserRequest, vaporRequest in
+            guard let user = users.removeValue(forKey: deleteUserRequest.id) else {
+                throw Abort(.notFound)
+            }
 
-        return .init(user: user)
+            return .init(user: user)
+    }
+}
+
+
+extension User {
+    struct Auth: Authenticatable {
+        let id: ID
+        let emailAddress: String
+        let password: String
+        let token: String
+
+        static let only = Self(id: UUID(), emailAddress: "authenticated@example.com", password: "pass", token: "sohJah9aiphieWaeSh1ceek2sue3aejoghu0augugh3Ahahthaecoo2vee9teing")
+    }
+}
+
+struct UserBasicAuthenticator: Vapor.AsyncBasicAuthenticator {
+    typealias User = Example.User.Auth
+
+    func authenticate(basic: BasicAuthorization, for request: Vapor.Request) async throws {
+        if
+            basic.username == User.only.emailAddress &&
+            basic.password == User.only.password
+        {
+            request.auth.login(User.only)
+        }
+    }
+}
+
+
+struct UserBearerAuthenticator: Vapor.AsyncBearerAuthenticator {
+    typealias User = Example.User.Auth
+
+    func authenticate(bearer: BearerAuthorization, for request: Vapor.Request) async throws {
+        if bearer.token == User.only.token {
+            request.auth.login(User.only)
+        }
     }
 }

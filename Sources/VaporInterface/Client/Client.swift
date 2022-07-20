@@ -11,11 +11,14 @@ import DictionaryEncoder
 
 public struct Client<NetworkAdapter: VaporInterface.ClientNetworkAdapter> {
     public let url: URL
-    private var networkAdapter: NetworkAdapter
+
+    public var authenticationCredentials: [AuthenticationCredentials] = []
 
     public var requestQueryEncoder = Util.defaultQueryEncoder
     public var requestBodyEncoder = Util.defaultContentEncoder
     public var responseBodyDecoder = Util.defaultContentDecoder
+
+    private var networkAdapter: NetworkAdapter
 
     init(url: URL, networkAdapter: NetworkAdapter) {
         self.url = url
@@ -45,12 +48,18 @@ extension Client {
         var requestHeaders = headers(forRequest: request)
         let requestBody = try body(forRequest: request, headers: &requestHeaders)
 
-        let requestInformation = RequestInformation(
+        var requestInformation = ClientRequestInformation(
             url: requestURL,
             method: requestMethod,
             headers: requestHeaders,
             body: requestBody
         )
+
+        if let authenticatableRequest = request as? AuthenticatableRequest {
+            authenticationCredentials
+                .first(where: {$0.method == authenticatableRequest.authenticationMethod})?
+                .encodeAuthentication(to: &requestInformation)
+        }
 
         return try networkAdapter.createRequest(fromInformation: requestInformation)
     }
@@ -153,22 +162,18 @@ extension Client {
 }
 
 
-public extension Client {
-    struct RequestInformation {
-        let url: URI
-        let method: HTTPMethod
-        let headers: HTTPHeaders
-        let body: ByteBuffer?
-    }
+public struct ClientRequestInformation {
+    var url: URI
+    var method: HTTPMethod
+    var headers: HTTPHeaders
+    var body: ByteBuffer?
 }
 
-public extension Client {
-    struct ResponseInformation {
-        let status: HTTPStatus
-        let version: HTTPVersion
-        let headers: HTTPHeaders
-        let body: ByteBuffer
-    }
+public struct ClientResponseInformation {
+    var status: HTTPStatus
+    var version: HTTPVersion
+    var headers: HTTPHeaders
+    var body: ByteBuffer
 }
 
 
