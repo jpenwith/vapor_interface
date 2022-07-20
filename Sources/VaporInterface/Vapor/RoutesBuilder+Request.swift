@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  RoutesBuilder+Request.swift
 //  
 //
 //  Created by me on 03/07/2022.
@@ -10,6 +10,7 @@ import Vapor
 
 
 // MARK: - Registering routes for defined requests
+@available(iOS 15, *)
 extension RoutesBuilder {
     @discardableResult
     public func on<Req: Request>(
@@ -18,9 +19,8 @@ extension RoutesBuilder {
         use handler: @escaping (Req, Vapor.Request) async throws -> Req.Response
     ) -> Vapor.Route {
         let vaporHandler: (Vapor.Request) async throws -> Vapor.Response = { vaporServerRequest in
-//print(vaporServerRequest.body.string)
             let request = try Req(vaporServerRequest: vaporServerRequest)
-//print(Req.self, vaporServerRequest)
+
             let response = try await handler(request, vaporServerRequest)
 
             return try response.makeVaporServerResponse()
