@@ -1,5 +1,5 @@
 //
-//  RequestWithVaporClientTests.swift
+//  VaporClientNetworkAdapterTests.swift
 //  
 //
 //  Created by me on 08/07/2022.
@@ -11,11 +11,11 @@ import XCTVapor
 import XCTest
 
 
-final class RequestWithVaporClientTests: XCTestCase {
+final class VaporClientNetworkAdapterTests: XCTestCase {
     var application: Application!
     var applicationRunTask: Task<(), Error>!
-//    var vaporClient: VaporClient!
-    var vaporClient: VaporInterface.Client<VaporClientNetworkAdapter>!
+
+    var client: VaporInterface.Client<VaporClientNetworkAdapter>!
 
     override func setUp() async throws {
         let application = Application(.testing)
@@ -25,14 +25,14 @@ final class RequestWithVaporClientTests: XCTestCase {
             try application.run()
         }
 
-        let vaporClient = VaporInterface.Client(
+        let client = VaporInterface.Client(
             url: .init(string: "http://localhost:8080/")!,
             networkAdapter: VaporClientNetworkAdapter(client: application.client)
         )
 
         self.application = application
         self.applicationRunTask = applicationRunTask
-        self.vaporClient = vaporClient
+        self.client = client
     }
 
     override func tearDown() async throws {
@@ -42,11 +42,11 @@ final class RequestWithVaporClientTests: XCTestCase {
 }
 
 
-extension RequestWithVaporClientTests {
+extension VaporClientNetworkAdapterTests {
     func testEmptyRequest() async throws {
         let request = EmptyRequest()
 
-        let response = try await vaporClient.execute(request)
+        let response = try await client.execute(request)
 
         XCTAssertEqual(response.status, .ok)
     }
@@ -54,7 +54,7 @@ extension RequestWithVaporClientTests {
     func testGETRequest() async throws {
         let request = GETRequest()
 
-        let response = try await vaporClient.execute(request)
+        let response = try await client.execute(request)
 
         XCTAssertEqual(response.status, .ok)
         XCTAssertEqual(response.body.message, "success")
@@ -63,7 +63,7 @@ extension RequestWithVaporClientTests {
     func testGETWithParameterRequest() async throws {
         let request = GETWithParameterRequest(value: "val")
 
-        let response = try await vaporClient.execute(request)
+        let response = try await client.execute(request)
 
         XCTAssertEqual(response.status, .ok)
         XCTAssertEqual(response.body.value, "val")
@@ -72,14 +72,14 @@ extension RequestWithVaporClientTests {
     func testGETWithQueryRequest() async throws {
         var request = GETWithQueryRequest(value: "val1")
 
-        var response = try await vaporClient.execute(request)
+        var response = try await client.execute(request)
 
         XCTAssertEqual(response.status, .ok)
         XCTAssertEqual(response.body.value, "val1")
 
         request = GETWithQueryRequest(value: "val2", optionalValue: "opt")
 
-        response = try await vaporClient.execute(request)
+        response = try await client.execute(request)
 
         XCTAssertEqual(response.status, .ok)
         XCTAssertEqual(response.body.value, "val2")
@@ -89,13 +89,13 @@ extension RequestWithVaporClientTests {
     func testPOSTWithBodyRequest() async throws {
         var request = POSTWithBodyRequest(value: "val1")
 
-        var response = try await vaporClient.execute(request)
+        var response = try await client.execute(request)
 
         XCTAssertEqual(response.status, .ok)
         XCTAssertEqual(response.body.value, "val1")
 
         request = POSTWithBodyRequest(value: "val2", optionalValue: "opt")
-        response = try await vaporClient.execute(request)
+        response = try await client.execute(request)
 
         XCTAssertEqual(response.status, .ok)
         XCTAssertEqual(response.body.value, "val2")
@@ -104,17 +104,17 @@ extension RequestWithVaporClientTests {
 }
 
 
-extension RequestWithVaporClientTests {
+extension VaporClientNetworkAdapterTests {
     func testUserRequests() async throws {
         let indexRequest = IndexUsersRequest()
-        var indexResponse = try await vaporClient.execute(indexRequest)
+        var indexResponse = try await client.execute(indexRequest)
         XCTAssertEqual(indexResponse.status, .ok)
         XCTAssertEqual(indexResponse.users.count, 0)
 
         let createRequest = CreateUserRequest(
             user: .init(name: "John", emailAddress: "john@example.com")
         )
-        let createResponse = try await vaporClient.execute(createRequest)
+        let createResponse = try await client.execute(createRequest)
         XCTAssertEqual(createResponse.status, .created)
         XCTAssertEqual(createResponse.user.name, "John")
         XCTAssertEqual(createResponse.user.emailAddress, "john@example.com")
@@ -123,19 +123,19 @@ extension RequestWithVaporClientTests {
         var readResponse: ReadUserRequest.Response
 
         do {
-            readResponse = try await vaporClient.execute(readRequest)
+            readResponse = try await client.execute(readRequest)
         }
-        catch let error as VaporInterface.ClientError.Response {
+        catch let error as VaporInterface.ClientResponseError {
             XCTAssertEqual(error.status, .notFound)
         }
 
         readRequest = ReadUserRequest(id: createResponse.user.id)
-        readResponse = try await vaporClient.execute(readRequest)
+        readResponse = try await client.execute(readRequest)
         XCTAssertEqual(readResponse.status, .ok)
         XCTAssertEqual(createResponse.user.name, "John")
         XCTAssertEqual(createResponse.user.emailAddress, "john@example.com")
 
-        indexResponse = try await vaporClient.execute(indexRequest)
+        indexResponse = try await client.execute(indexRequest)
         XCTAssertEqual(indexResponse.status, .ok)
         XCTAssertEqual(indexResponse.users.count, 1)
         XCTAssertEqual(indexResponse.users.first?.id, createResponse.user.id)
@@ -146,7 +146,7 @@ extension RequestWithVaporClientTests {
             emailAddress: "jane@example.com",
             lastActiveAt: nil
         ))
-        let partialUpdateResponse = try await vaporClient.execute(partialUpdateRequest)
+        let partialUpdateResponse = try await client.execute(partialUpdateRequest)
         XCTAssertEqual(partialUpdateResponse.status, .ok)
         XCTAssertEqual(partialUpdateResponse.user.id, createResponse.user.id)
         XCTAssertEqual(partialUpdateResponse.user.name, createResponse.user.name)
@@ -158,7 +158,7 @@ extension RequestWithVaporClientTests {
             emailAddress: "jannet@example.com",
             lastActiveAt: Date()
         ))
-        let fullUpdateResponse = try await vaporClient.execute(fullUpdateRequest)
+        let fullUpdateResponse = try await client.execute(fullUpdateRequest)
         XCTAssertEqual(fullUpdateResponse.status, .ok)
         XCTAssertEqual(fullUpdateResponse.user.id, createResponse.user.id)
         XCTAssertEqual(fullUpdateResponse.user.name, "Jannet")
@@ -166,11 +166,11 @@ extension RequestWithVaporClientTests {
         XCTAssertEqual(fullUpdateResponse.user.lastActiveAt.timeIntervalSinceReferenceDate, Date().timeIntervalSinceReferenceDate, accuracy: 1)
 
         let deleteRequest = DeleteUserRequest(id: createResponse.user.id)
-        let deleteResponse = try await vaporClient.execute(deleteRequest)
+        let deleteResponse = try await client.execute(deleteRequest)
         XCTAssertEqual(deleteResponse.status, .ok)
         XCTAssertEqual(deleteResponse.user.id, createResponse.user.id)
 
-        indexResponse = try await vaporClient.execute(indexRequest)
+        indexResponse = try await client.execute(indexRequest)
         XCTAssertEqual(indexResponse.status, .ok)
         XCTAssertEqual(indexResponse.users.count, 0)
     }

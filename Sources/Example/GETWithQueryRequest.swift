@@ -23,7 +23,7 @@ struct GETWithQueryRequest {
 
 extension GETWithQueryRequest: VaporInterface.Request {
     struct Route: VaporInterface.Route {
-        static let path = "get/with/Query"
+        static let path = "get/with/query"
     }
 
     struct Query: Content {

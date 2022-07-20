@@ -45,12 +45,12 @@ final class RawRequestTests: XCTestCase {
     }
 
     func testGETWithQueryRequest() async throws {
-        try application.test(.GET, "get/with/Query?value=xyz") { res in
+        try application.test(.GET, "get/with/query?value=xyz") { res in
             XCTAssertEqual(res.status, .ok)
             XCTAssertEqual(res.body.string, "{\"value\":\"xyz\"}")
         }
 
-        try application.test(.GET, "get/with/Query?value=xyz&optionalValue=abc") { res in
+        try application.test(.GET, "get/with/query?value=xyz&optionalValue=abc") { res in
             XCTAssertEqual(res.status, .ok)
             XCTAssertEqual(res.body.string, "{\"value\":\"xyz\",\"optionalValue\":\"abc\"}")
         }

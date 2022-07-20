@@ -3,6 +3,7 @@ import VaporInterface
 
 var users = [UUID: User.Read]()
 
+
 func routes(_ app: Application) throws {
     app.on(EmptyRequest.self) { _, vaporRequest in
         return .init()

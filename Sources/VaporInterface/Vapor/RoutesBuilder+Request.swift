@@ -18,8 +18,9 @@ extension RoutesBuilder {
         use handler: @escaping (Req, Vapor.Request) async throws -> Req.Response
     ) -> Vapor.Route {
         let vaporHandler: (Vapor.Request) async throws -> Vapor.Response = { vaporServerRequest in
+//print(vaporServerRequest.body.string)
             let request = try Req(vaporServerRequest: vaporServerRequest)
-
+//print(Req.self, vaporServerRequest)
             let response = try await handler(request, vaporServerRequest)
 
             return try response.makeVaporServerResponse()
@@ -36,7 +37,7 @@ extension RoutesBuilder {
     ) -> Vapor.Route where Req.Body == EmptyRequestBody {
         let vaporHandler: (Vapor.Request) async throws -> Vapor.Response = { vaporServerRequest in
             let request = try Req(vaporServerRequest: vaporServerRequest)
-
+print(Req.self, vaporServerRequest)
             let response = try await handler(request, vaporServerRequest)
 
             return try response.makeVaporServerResponse()
