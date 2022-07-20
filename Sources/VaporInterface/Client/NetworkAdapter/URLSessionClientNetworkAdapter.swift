@@ -42,7 +42,23 @@ extension URLSessionClientNetworkAdapter {
 
 extension URLSessionClientNetworkAdapter {
     public func executeRequest(_ request: Self.Request) async throws -> Response {
-        return try await session.data(for: request) as! (Data, Foundation.HTTPURLResponse)
+        if #available(iOS 15.0, *) {
+            return try await session.data(for: request) as! (Data, Foundation.HTTPURLResponse)
+        }
+        else {
+            return try await withCheckedThrowingContinuation { continuation in
+                let task = session.dataTask(with: request) { data, response, error in
+                    guard let data = data, let response = response else {
+                        let error = error ?? URLError(.badServerResponse)
+                        return continuation.resume(throwing: error)
+                    }
+
+                    continuation.resume(returning: (data, response) as! (Data, Foundation.HTTPURLResponse))
+                }
+
+                task.resume()
+            }
+        }
     }
 }
 
