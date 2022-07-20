@@ -2,7 +2,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "VaporInterface",
+    name: "vapor-interface",
     platforms: [
         .iOS(.v13),
         .macOS(.v12),
