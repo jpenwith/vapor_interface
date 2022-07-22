@@ -20,7 +20,7 @@ public struct Client<NetworkAdapter: VaporInterface.ClientNetworkAdapter> {
 
     private var networkAdapter: NetworkAdapter
 
-    init(url: URL, networkAdapter: NetworkAdapter) {
+    public init(url: URL, networkAdapter: NetworkAdapter) {
         self.url = url
         self.networkAdapter = networkAdapter
     }
