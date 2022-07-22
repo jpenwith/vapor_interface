@@ -41,7 +41,7 @@ extension GETWithQueryRequest: VaporInterface.Request {
         }
     }
 
-    init(parameters: EmptyRequestRouteParameters, query: Query, body: EmptyRequestBody) throws {
+    init(parameters: EmptyRequestRouteParameters, query: Query, headers: HTTPHeaders, body: EmptyRequestBody) throws {
         self.value = query.value
         self.optionalValue = query.optionalValue
     }

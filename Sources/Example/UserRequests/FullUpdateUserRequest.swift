@@ -38,7 +38,7 @@ extension FullUpdateUserRequest: VaporInterface.Request {
 
 
 extension FullUpdateUserRequest {
-    init(parameters: Route.Parameters, query: EmptyRequestQuery, body: Body) throws {
+    init(parameters: Route.Parameters, query: EmptyRequestQuery, headers: HTTPHeaders, body: Body) throws {
         guard parameters.id == body.id else {
             throw Abort(.badRequest, reason: ":id and user.id should match")
         }

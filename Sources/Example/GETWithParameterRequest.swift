@@ -35,7 +35,7 @@ extension GETWithParameterRequest: VaporInterface.Request {
 
 
 extension GETWithParameterRequest {
-    init(parameters: Route.Parameters, query: EmptyRequestQuery, body: EmptyRequestBody) throws {
+    init(parameters: Route.Parameters, query: EmptyRequestQuery, headers: HTTPHeaders, body: EmptyRequestBody) throws {
         self.value = parameters.value
     }
 

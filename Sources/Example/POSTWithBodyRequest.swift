@@ -45,7 +45,7 @@ extension POSTWithBodyRequest: VaporInterface.Request {
 }
 
 extension POSTWithBodyRequest {
-    init(parameters: Route.Parameters, query: EmptyRequestQuery, body: Body) throws {
+    init(parameters: Route.Parameters, query: EmptyRequestQuery, headers: HTTPHeaders, body: Body) throws {
         self.value = body.value
         self.optionalValue = body.optionalValue
     }

@@ -36,7 +36,7 @@ extension CreateUserRequest: VaporInterface.Request {
 
 
 extension CreateUserRequest {
-    init(parameters: EmptyRequestRouteParameters, query: EmptyRequestQuery, body: Body) throws {
+    init(parameters: EmptyRequestRouteParameters, query: EmptyRequestQuery, headers: HTTPHeaders, body: Body) throws {
         self.user = body
     }
 

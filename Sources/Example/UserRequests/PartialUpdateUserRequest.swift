@@ -38,7 +38,7 @@ extension PartialUpdateUserRequest: VaporInterface.Request {
 
 
 extension PartialUpdateUserRequest {
-    init(parameters: Route.Parameters, query: EmptyRequestQuery, body: Body) throws {
+    init(parameters: Route.Parameters, query: EmptyRequestQuery, headers: HTTPHeaders, body: Body) throws {
         guard parameters.id == body.id else {
             throw Abort(.badRequest, reason: "parameters.id and body.id should match")
         }

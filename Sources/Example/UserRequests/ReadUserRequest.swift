@@ -30,7 +30,7 @@ extension ReadUserRequest: VaporInterface.Request {
 
 
 extension ReadUserRequest {
-    init(parameters: Route.Parameters, query: EmptyRequestQuery, body: EmptyRequestBody) throws {
+    init(parameters: Route.Parameters, query: EmptyRequestQuery, headers: HTTPHeaders, body: EmptyRequestBody) throws {
         self.id = parameters.id
     }
 

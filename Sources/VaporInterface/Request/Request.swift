@@ -24,7 +24,7 @@ public protocol Request {
 
     var body: Body { get }
 
-    init(parameters: Route.Parameters, query: Query, body: Body) throws
+    init(parameters: Route.Parameters, query: Query, headers: HTTPHeaders, body: Body) throws
 }
 
 
@@ -41,7 +41,7 @@ public extension Request {
 }
 
 public struct EmptyRequest: Request {
-    public init(parameters: EmptyRequestRouteParameters, query: EmptyRequestQuery, body: EmptyRequestBody) throws {}
+    public init(parameters: EmptyRequestRouteParameters, query: EmptyRequestQuery, headers: HTTPHeaders, body: EmptyRequestBody) throws {}
 
     public init() {}
 }

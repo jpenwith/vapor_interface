@@ -24,7 +24,7 @@ extension IndexUsersRequest: VaporInterface.Request {
 
 
 extension IndexUsersRequest {
-    public init(parameters: EmptyRequestRouteParameters, query: EmptyRequestQuery, body: EmptyRequestBody) throws {}
+    public init(parameters: EmptyRequestRouteParameters, query: EmptyRequestQuery, headers: HTTPHeaders, body: EmptyRequestBody) throws {}
 }
 
 

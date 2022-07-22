@@ -27,7 +27,7 @@ extension GETRequest: VaporInterface.Request {
 
 
 extension GETRequest {
-    init(parameters: Route.Parameters, query: EmptyRequestQuery, body: EmptyRequestBody) throws {}
+    init(parameters: Route.Parameters, query: EmptyRequestQuery, headers: HTTPHeaders, body: EmptyRequestBody) throws {}
 }
 
 

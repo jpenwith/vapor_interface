@@ -54,6 +54,7 @@ extension Request {
         try self.init(
             parameters: try Self.decodeParameters(vaporRequestParameters: vaporServerRequest.parameters),
             query: try Self.decodeQuery(vaporRequestQuery: vaporServerRequest.query),
+            headers: vaporServerRequest.headers,
             body: try Self.decodeBody(vaporRequestBody: vaporServerRequest.content)
         )
     }
@@ -67,6 +68,7 @@ extension Request where Body == EmptyRequestBody {
         try self.init(
             parameters: try Self.decodeParameters(vaporRequestParameters: vaporServerRequest.parameters),
             query: try Self.decodeQuery(vaporRequestQuery: vaporServerRequest.query),
+            headers: vaporServerRequest.headers,
             body: .init()
         )
     }
