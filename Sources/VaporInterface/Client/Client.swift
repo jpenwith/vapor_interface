@@ -16,7 +16,7 @@ public protocol ClientDelegate {
     func client<NetworkAdapter: ClientNetworkAdapter>(
         _ client: Client<NetworkAdapter>,
         modifyNetworkResponse networkResponse: NetworkAdapter.Response
-    ) -> NetworkAdapter.Request
+    ) -> NetworkAdapter.Response
 }
 
 extension ClientDelegate {
