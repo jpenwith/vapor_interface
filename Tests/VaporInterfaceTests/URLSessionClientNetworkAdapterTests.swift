@@ -12,9 +12,9 @@ import XCTest
 
 
 final class URLSessionClientNetworkAdapterTests: XCTestCase {
-    var application: Application!
-    var applicationRunTask: Task<(), Error>!
-    var client: VaporInterface.Client<URLSessionClientNetworkAdapter>!
+    private var application: Application!
+    private var applicationRunTask: Task<(), Error>!
+    private var client: VaporInterface.Client<URLSessionClientNetworkAdapter>!
 
     override func setUp() async throws {
         let application = Application(.testing)

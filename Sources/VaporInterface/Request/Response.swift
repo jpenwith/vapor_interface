@@ -28,7 +28,7 @@ public protocol Response{
 public extension VaporInterface.Response {
     var status: HTTPStatus { .ok }
 
-    var version: HTTPVersion { .init(major: 1, minor: 1) }
+    var version: HTTPVersion { .http1_1 }
 
     var headers: HTTPHeaders { .init() }
 

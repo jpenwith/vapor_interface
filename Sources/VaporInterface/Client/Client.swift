@@ -8,6 +8,11 @@
 import Vapor
 import DictionaryEncoder
 
+public protocol ClientDelegate {
+    func client<NetworkAdapter: ClientNetworkAdapter>(_ client: Client<NetworkAdapter>, willSendNetworkRequest networkRequest: inout NetworkAdapter.Request)
+    func client<NetworkAdapter: ClientNetworkAdapter>(_ client: Client<NetworkAdapter>, didReceiveNetworkResponse networkResponse: inout NetworkAdapter.Response)
+}
+
 
 public struct Client<NetworkAdapter: VaporInterface.ClientNetworkAdapter> {
     public let url: URL
@@ -28,14 +33,20 @@ public struct Client<NetworkAdapter: VaporInterface.ClientNetworkAdapter> {
     public func execute<Request: VaporInterface.Request>(
         _ request: Request
     ) async throws -> Request.Response {
-        let networkRequest = try encodeRequest(request)
+        var networkRequest = try encodeRequest(request)
 
-        let networkResponse = try await executeNetworkRequest(networkRequest)
+        delegate?.client(self, willSendNetworkRequest: &networkRequest)
+
+        var networkResponse = try await executeNetworkRequest(networkRequest)
+
+        delegate?.client(self, didReceiveNetworkResponse: &networkResponse)
 
         let response: Request.Response = try decodeNetworkResponse(networkResponse)
 
         return response
     }
+
+    public var delegate: ClientDelegate? = nil
 }
 
 
