@@ -9,8 +9,30 @@ import Vapor
 import DictionaryEncoder
 
 public protocol ClientDelegate {
-    func client<NetworkAdapter: ClientNetworkAdapter>(_ client: Client<NetworkAdapter>, willSendNetworkRequest networkRequest: inout NetworkAdapter.Request)
-    func client<NetworkAdapter: ClientNetworkAdapter>(_ client: Client<NetworkAdapter>, didReceiveNetworkResponse networkResponse: inout NetworkAdapter.Response)
+    func client<NetworkAdapter: ClientNetworkAdapter>(
+        _ client: Client<NetworkAdapter>,
+        modifyNetworkRequest networkRequest: NetworkAdapter.Request
+    ) -> NetworkAdapter.Request
+    func client<NetworkAdapter: ClientNetworkAdapter>(
+        _ client: Client<NetworkAdapter>,
+        modifyNetworkResponse networkResponse: NetworkAdapter.Response
+    ) -> NetworkAdapter.Request
+}
+
+extension ClientDelegate {
+    func client<NetworkAdapter: ClientNetworkAdapter>(
+        _ client: Client<NetworkAdapter>,
+        modifyNetworkRequest networkRequest: NetworkAdapter.Request
+    ) -> NetworkAdapter.Request {
+        return networkRequest
+    }
+
+    func client<NetworkAdapter: ClientNetworkAdapter>(
+        _ client: Client<NetworkAdapter>,
+        modifyNetworkResponse networkResponse: NetworkAdapter.Response
+    ) -> NetworkAdapter.Response {
+        return networkResponse
+    }
 }
 
 
@@ -35,11 +57,15 @@ public struct Client<NetworkAdapter: VaporInterface.ClientNetworkAdapter> {
     ) async throws -> Request.Response {
         var networkRequest = try encodeRequest(request)
 
-        delegate?.client(self, willSendNetworkRequest: &networkRequest)
+        if let delegate = delegate {
+//            networkRequest = delegate.client(self, modifyNetworkRequest: networkRequest)
+        }
 
         var networkResponse = try await executeNetworkRequest(networkRequest)
 
-        delegate?.client(self, didReceiveNetworkResponse: &networkResponse)
+        if let delegate = delegate {
+//            networkResponse = delegate.client(self, modifyNetworkResponse: networkResponse)
+        }
 
         let response: Request.Response = try decodeNetworkResponse(networkResponse)
 
