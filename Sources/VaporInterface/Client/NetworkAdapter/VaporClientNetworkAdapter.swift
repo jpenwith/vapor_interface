@@ -48,3 +48,10 @@ extension VaporClientNetworkAdapter {
         )
     }
 }
+
+
+extension ClientNetworkAdapter where Self == VaporClientNetworkAdapter {
+    static func vapor(client: Vapor.Client) -> Self {
+        .init(client: client)
+    }
+}

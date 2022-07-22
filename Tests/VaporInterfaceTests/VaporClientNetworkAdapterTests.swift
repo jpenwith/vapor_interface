@@ -27,7 +27,7 @@ final class VaporClientNetworkAdapterTests: XCTestCase {
 
         let client = VaporInterface.Client(
             url: .init(string: "http://localhost:8080/")!,
-            networkAdapter: VaporClientNetworkAdapter(client: application.client)
+            networkAdapter: .vapor(client: application.client)
         )
 
         self.application = application

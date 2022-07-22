@@ -26,7 +26,7 @@ final class URLSessionClientNetworkAdapterTests: XCTestCase {
 
         let client = VaporInterface.Client(
             url: .init(string: "http://localhost:8080/")!,
-            networkAdapter: URLSessionClientNetworkAdapter(session: URLSession.shared)
+            networkAdapter: .urlSession(session: .shared)
         )
 
         self.application = application
