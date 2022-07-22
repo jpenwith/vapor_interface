@@ -83,7 +83,7 @@ extension URLSessionClientNetworkAdapter {
 }
 
 
-extension ClientNetworkAdapter where Self == URLSessionClientNetworkAdapter {
+public extension ClientNetworkAdapter where Self == URLSessionClientNetworkAdapter {
     static func urlSession(session: URLSession) -> Self {
         .init(session: session)
     }
