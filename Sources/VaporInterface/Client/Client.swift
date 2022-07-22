@@ -58,13 +58,13 @@ public struct Client<NetworkAdapter: VaporInterface.ClientNetworkAdapter> {
         var networkRequest = try encodeRequest(request)
 
         if let delegate = delegate {
-//            networkRequest = delegate.client(self, modifyNetworkRequest: networkRequest)
+            networkRequest = delegate.client(self, modifyNetworkRequest: networkRequest)
         }
 
         var networkResponse = try await executeNetworkRequest(networkRequest)
 
         if let delegate = delegate {
-//            networkResponse = delegate.client(self, modifyNetworkResponse: networkResponse)
+            networkResponse = delegate.client(self, modifyNetworkResponse: networkResponse)
         }
 
         let response: Request.Response = try decodeNetworkResponse(networkResponse)
