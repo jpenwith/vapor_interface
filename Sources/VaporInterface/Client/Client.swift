@@ -8,33 +8,6 @@
 import Vapor
 import DictionaryEncoder
 
-public protocol ClientDelegate {
-    func client<NetworkAdapter: ClientNetworkAdapter>(
-        _ client: Client<NetworkAdapter>,
-        modifyNetworkRequest networkRequest: NetworkAdapter.Request
-    ) -> NetworkAdapter.Request
-    func client<NetworkAdapter: ClientNetworkAdapter>(
-        _ client: Client<NetworkAdapter>,
-        modifyNetworkResponse networkResponse: NetworkAdapter.Response
-    ) -> NetworkAdapter.Response
-}
-
-extension ClientDelegate {
-    func client<NetworkAdapter: ClientNetworkAdapter>(
-        _ client: Client<NetworkAdapter>,
-        modifyNetworkRequest networkRequest: NetworkAdapter.Request
-    ) -> NetworkAdapter.Request {
-        return networkRequest
-    }
-
-    func client<NetworkAdapter: ClientNetworkAdapter>(
-        _ client: Client<NetworkAdapter>,
-        modifyNetworkResponse networkResponse: NetworkAdapter.Response
-    ) -> NetworkAdapter.Response {
-        return networkResponse
-    }
-}
-
 
 public struct Client<NetworkAdapter: VaporInterface.ClientNetworkAdapter> {
     public let url: URL
@@ -140,7 +113,11 @@ extension Client {
     private func url<Request: VaporInterface.Request>(forRequest request: Request) throws -> URI {
         var uri = URI(string: url.absoluteString)
 
-        uri.path = try path(forRoute: Request.Route.self, parameters: request.parameters)
+        if !uri.path.hasSuffix("/") {
+            uri.path = uri.path + "/"
+        }
+        let path = try path(forRoute: Request.Route.self, parameters: request.parameters)
+        uri.path = uri.path + path
 
         if Request.Query.self != EmptyRequestQuery.self {
             try requestQueryEncoder.encode(request.query, to: &uri)
@@ -214,18 +191,3 @@ public struct ClientResponseInformation {
 }
 
 
-public struct ClientResponseError: Swift.Error {
-    public let status: HTTPStatus
-    public let details: Details
-
-    public struct Details: Content {
-        public let error: Bool
-        public let reason: String
-    }
-}
-
-extension ClientResponseError: LocalizedError {
-    public var errorDescription: String? {
-        NSLocalizedString("Response error: Status: \(status), reason: \(details.reason)", comment: "Response error")
-    }
-}
