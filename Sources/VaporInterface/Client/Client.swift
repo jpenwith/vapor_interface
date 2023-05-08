@@ -92,7 +92,7 @@ extension Client {
             )
 
             throw ClientResponseError(
-                status: responseInformation.status, details: responseErrorDetails
+                status: responseInformation.status, details: responseErrorDetails, responseInformation: responseInformation
             )
         }
 
