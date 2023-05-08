@@ -92,7 +92,7 @@ extension Client {
             )
 
             throw ClientResponseError(
-                status: responseInformation.status, details: responseErrorDetails, responseInformation: responseInformation
+                details: responseErrorDetails, response: responseInformation
             )
         }
 
@@ -177,17 +177,17 @@ extension Client {
 
 
 public struct ClientRequestInformation {
-    var url: URI
-    var method: HTTPMethod
-    var headers: HTTPHeaders
-    var body: ByteBuffer?
+    public var url: URI
+    public var method: HTTPMethod
+    public var headers: HTTPHeaders
+    public var body: ByteBuffer?
 }
 
 public struct ClientResponseInformation {
-    var status: HTTPStatus
-    var version: HTTPVersion
-    var headers: HTTPHeaders
-    var body: ByteBuffer
+    public var status: HTTPStatus
+    public var version: HTTPVersion
+    public var headers: HTTPHeaders
+    public var body: ByteBuffer
 }
 
 

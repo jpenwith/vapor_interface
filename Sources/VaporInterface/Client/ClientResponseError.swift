@@ -10,9 +10,8 @@ import Vapor
 
 
 public struct ClientResponseError: Swift.Error {
-    public let status: HTTPStatus
     public let details: Details
-    public let responseInformation: ClientResponseInformation
+    public let response: ClientResponseInformation
 
     public struct Details: Content {
         public let error: Bool
@@ -22,6 +21,6 @@ public struct ClientResponseError: Swift.Error {
 
 extension ClientResponseError: LocalizedError {
     public var errorDescription: String? {
-        NSLocalizedString("Response error: Status: \(status), reason: \(details.reason)", comment: "Response error")
+        NSLocalizedString("Response error: Status: \(response.status), reason: \(details.reason)", comment: "Response error")
     }
 }
