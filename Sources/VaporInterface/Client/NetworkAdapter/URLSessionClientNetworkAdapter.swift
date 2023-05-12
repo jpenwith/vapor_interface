@@ -15,8 +15,8 @@ import Vapor
 
 
 public struct URLSessionClientNetworkAdapter: ClientNetworkAdapter {
-    public typealias Request = Foundation.URLRequest
-    public typealias Response = (Data, Foundation.HTTPURLResponse)
+    public typealias Request = URLRequest
+    public typealias Response = (Data, HTTPURLResponse)
     
     private let session: URLSession
 
@@ -46,7 +46,7 @@ extension URLSessionClientNetworkAdapter {
 extension URLSessionClientNetworkAdapter {
     public func executeRequest(_ request: Self.Request) async throws -> Response {
         if #available(iOS 15.0, *) {
-            return try await session.data(for: request) as! (Data, Foundation.HTTPURLResponse)
+            return try await session.data(for: request) as! (Data, HTTPURLResponse)
         }
         else {
             return try await withCheckedThrowingContinuation { continuation in
@@ -56,7 +56,7 @@ extension URLSessionClientNetworkAdapter {
                         return continuation.resume(throwing: error)
                     }
 
-                    continuation.resume(returning: (data, response) as! (Data, Foundation.HTTPURLResponse))
+                    continuation.resume(returning: (data, response) as! (Data, HTTPURLResponse))
                 }
 
                 task.resume()
