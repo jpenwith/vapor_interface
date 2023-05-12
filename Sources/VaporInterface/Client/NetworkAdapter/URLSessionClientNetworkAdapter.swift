@@ -5,6 +5,8 @@
 //  Created by me on 16/07/2022.
 //
 
+#if !os(Linux)
+
 import DictionaryEncoder
 import Foundation
 #if canImport(FoundationNetworking)
@@ -91,3 +93,5 @@ public extension ClientNetworkAdapter where Self == URLSessionClientNetworkAdapt
         .init(session: session)
     }
 }
+
+#endif
