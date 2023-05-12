@@ -7,6 +7,9 @@
 
 import DictionaryEncoder
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 import NIOFoundationCompat
 import Vapor
 

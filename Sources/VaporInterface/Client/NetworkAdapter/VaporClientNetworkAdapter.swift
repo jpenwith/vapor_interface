@@ -7,8 +7,6 @@
 
 import Vapor
 import AsyncHTTPClient
-import Network
-
 
 public struct VaporClientNetworkAdapter: ClientNetworkAdapter {
     public typealias Request = Vapor.ClientRequest
